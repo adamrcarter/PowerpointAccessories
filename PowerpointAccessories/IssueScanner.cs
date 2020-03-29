@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Presentation;
@@ -29,23 +30,30 @@ namespace PowerpointAccessories
 
         public void Scan() //TODO add file exception handling 
         {
-            using (PresentationDocument document = PresentationDocument.Open(this.powerpoint.FilePath, true))
+            try
             {
-                SlidePart slidePart;
-                var presentation = document.PresentationPart.Presentation;
-                Console.WriteLine("Loaded");
-                foreach (SlideId slideId in presentation.SlideIdList)
+                using (PresentationDocument document = PresentationDocument.Open(this.powerpoint.FilePath, true))
                 {
-                    slidePart = document.PresentationPart.GetPartById(slideId.RelationshipId) as SlidePart;
-                    if (slidePart == null || slidePart.Slide == null)
+                    SlidePart slidePart;
+                    var presentation = document.PresentationPart.Presentation;
+                    Console.WriteLine("Loaded");
+                    foreach (SlideId slideId in presentation.SlideIdList)
                     {
-                        continue;
+                        slidePart = document.PresentationPart.GetPartById(slideId.RelationshipId) as SlidePart;
+                        if (slidePart == null || slidePart.Slide == null)
+                        {
+                            continue;
+                        }
+                        string currentSlideRelID = slideId.RelationshipId.Value;
+                        SlideModel slidemodel = CreateNewSlide(currentSlideRelID);
+                        Slide slide = slidePart.Slide;
+                        checkIssues(slide, currentSlideRelID, slidePart, document);
                     }
-                    string currentSlideRelID = slideId.RelationshipId.Value;
-                    SlideModel slidemodel = CreateNewSlide(currentSlideRelID);
-                    Slide slide = slidePart.Slide;
-                    checkIssues(slide, currentSlideRelID, slidePart, document);
                 }
+            }
+            catch(FileNotFoundException)
+            {
+                Console.WriteLine("Opps, we could not find the presentation you were referencing. Try again....");
             }
         }
 
@@ -79,7 +87,7 @@ namespace PowerpointAccessories
                     fixable = true;
 
                 }
-                IssueItem issue = new VideoIssueItem(filename, video, description, fixable);
+                IIssue issue = new VideoIssueItem(filename, video, description, fixable);
                 powerpoint.slides[currentSlideRelID].addToIssueList(issue);
             }
 
@@ -97,11 +105,14 @@ namespace PowerpointAccessories
 
         private void checkForNoMouseClickTransition(string currentSlideRelID, Transition transitionElement)
         {
-            var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advClick").FirstOrDefault();
-            if (attribute.Value != null && attribute.Value == "0")
+            if (!(transitionElement.Parent.GetType() == typeof(AlternateContentFallback)))
             {
-                IssueItem issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found no click transition issue on {SlideModel.rIdtoSlideIndex(currentSlideRelID)}", true);
-                powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advClick").FirstOrDefault();
+                if (attribute.Value != null && attribute.Value == "0")
+                {
+                    IIssue issue = new NoClickTransitionIssue(transitionElement, $"Found no click transition issue on {SlideModel.rIdtoSlideIndex(currentSlideRelID)}", true);
+                    powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                }
             }
         }
 
@@ -110,7 +121,7 @@ namespace PowerpointAccessories
             var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advTm").FirstOrDefault();
             if (attribute.Value != null)
             {
-                IssueItem issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found auto transition on {SlideModel.rIdtoSlideIndex(currentSlideRelID)} duration: {attribute.Value} ", true);
+                IIssue issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found auto transition on {SlideModel.rIdtoSlideIndex(currentSlideRelID)} duration: {attribute.Value} ", true);
                 powerpoint.slides[currentSlideRelID].addToIssueList(issue);
             }
 

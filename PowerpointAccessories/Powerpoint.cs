@@ -1,8 +1,5 @@
-﻿using PowerpointAccessories;
-using PowerpointAccessories.Issues;
-using System;
+﻿
 using System.Collections.Generic;
-using System.Text;
 
 namespace PowerpointAccessories
 {
@@ -15,7 +12,6 @@ namespace PowerpointAccessories
         {
             FilePath = filePath;
             slides = new Dictionary<string, SlideModel>();
-
             
         }
         public Powerpoint()

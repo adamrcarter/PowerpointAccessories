@@ -22,7 +22,7 @@ namespace PowerpointAccessories
             this.Issues = issues;
         }
 
-        public void addToIssueList(IssueItem issue)
+        public void addToIssueList(IIssue issue)
         {
             Issues.Add(issue);
         }
