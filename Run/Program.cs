@@ -1,11 +1,14 @@
 ﻿using PowerpointAccessories;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Run
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             string input;
@@ -22,6 +25,7 @@ namespace Run
                 }
                 else
                 {
+                    var timer = Stopwatch.StartNew();
                     powerpoint = PowerpointFactory.GetPowerpoint(input);
                     scanner = IssueScannerFactory.GetIssueScanner(powerpoint);
                     scanner.Scan();
@@ -39,6 +43,8 @@ namespace Run
                         }
 
                     }
+                    timer.Stop();
+                    Console.WriteLine(timer.Elapsed.TotalSeconds);
                 }
             }
         }

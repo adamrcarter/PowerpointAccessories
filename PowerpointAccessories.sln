@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerpointAccessories", "PowerpointAccessories\PowerpointAccessories.csproj", "{33936E4B-C98E-4916-A6E5-1373738250BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run", "Run\Run.csproj", "{BBD06AF6-3772-436F-92AB-719B9F089AED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Run", "Run\Run.csproj", "{BBD06AF6-3772-436F-92AB-719B9F089AED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTests", "NUnitTests\NUnitTests.csproj", "{F86AAFFC-983D-414F-80F3-F486AA2183EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BBD06AF6-3772-436F-92AB-719B9F089AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBD06AF6-3772-436F-92AB-719B9F089AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBD06AF6-3772-436F-92AB-719B9F089AED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F86AAFFC-983D-414F-80F3-F486AA2183EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F86AAFFC-983D-414F-80F3-F486AA2183EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F86AAFFC-983D-414F-80F3-F486AA2183EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F86AAFFC-983D-414F-80F3-F486AA2183EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
