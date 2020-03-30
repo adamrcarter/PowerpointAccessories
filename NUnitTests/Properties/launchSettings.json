@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NUnitTests": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\conta\\OneDrive\\Documents\\Projects\\PowerpointAccessories\\NUnitTests"
+    }
+  }
+}
