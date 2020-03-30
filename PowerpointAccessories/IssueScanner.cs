@@ -65,8 +65,8 @@ namespace PowerpointAccessories
 
         private void CheckIssues(Slide slide, String currentSlideRelID, SlidePart slidePart, PresentationDocument document)
         {
-            Task.Run(()=>CheckForVideo(slide, currentSlideRelID, slidePart, document));
-            Task.Run(()=>CheckTransitionIssues(slide, currentSlideRelID, document));
+            CheckForVideo(slide, currentSlideRelID, slidePart, document);
+            CheckTransitionIssues(slide, currentSlideRelID, document);
         }
 
         private SlideModel CreateNewSlide(string id)
