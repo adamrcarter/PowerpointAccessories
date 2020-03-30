@@ -17,7 +17,7 @@ namespace NUnitTests
         {
             IIssueScanner scanner = IssueScannerFactory.GetIssueScanner(power);
             scanner.Scan();
-            Dictionary<string, SlideModel> slides = (Dictionary<string, SlideModel>)powerpoint.slides;
+            Dictionary<string, SlideModel> slides = (Dictionary<string, SlideModel>)power.slides;
             foreach (KeyValuePair<string, SlideModel> slide in slides)
             {
 
