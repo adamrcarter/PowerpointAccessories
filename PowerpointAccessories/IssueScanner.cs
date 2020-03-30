@@ -59,14 +59,15 @@ namespace PowerpointAccessories
             }
             catch (FileNotFoundException)
             {
+                
                 Console.WriteLine("Opps, we could not find the presentation you were referencing. Try again....");
             }
         }
 
         private void CheckIssues(Slide slide, String currentSlideRelID, SlidePart slidePart, PresentationDocument document)
         {
-            Task.Run(()=>CheckForVideo(slide, currentSlideRelID, slidePart, document));
-            Task.Run(()=>CheckTransitionIssues(slide, currentSlideRelID, document));
+            CheckForVideo(slide, currentSlideRelID, slidePart, document);
+            CheckTransitionIssues(slide, currentSlideRelID, document);
         }
 
         private SlideModel CreateNewSlide(string id)
@@ -125,13 +126,15 @@ namespace PowerpointAccessories
 
         private void CheckForAutoTransition(String currentSlideRelID, Transition transitionElement)
         {
-            var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advTm").FirstOrDefault();
-            if (attribute.Value != null)
+            if (!(transitionElement.Parent.GetType() == typeof(AlternateContentFallback)))
             {
-                IIssue issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found auto transition on {SlideModel.rIdtoSlideIndex(currentSlideRelID)} duration: {attribute.Value} ", true);
-                powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advTm").FirstOrDefault();
+                if (attribute.Value != null)
+                {
+                    IIssue issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found auto transition on {SlideModel.rIdtoSlideIndex(currentSlideRelID)} duration: {attribute.Value} ", true);
+                    powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                }
             }
-
 
         }
 
