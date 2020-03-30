@@ -125,13 +125,15 @@ namespace PowerpointAccessories
 
         private void CheckForAutoTransition(String currentSlideRelID, Transition transitionElement)
         {
-            var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advTm").FirstOrDefault();
-            if (attribute.Value != null)
+            if (!(transitionElement.Parent.GetType() == typeof(AlternateContentFallback)))
             {
-                IIssue issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found auto transition on {SlideModel.rIdtoSlideIndex(currentSlideRelID)} duration: {attribute.Value} ", true);
-                powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advTm").FirstOrDefault();
+                if (attribute.Value != null)
+                {
+                    IIssue issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found auto transition on {SlideModel.rIdtoSlideIndex(currentSlideRelID)} duration: {attribute.Value} ", true);
+                    powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                }
             }
-
 
         }
 
