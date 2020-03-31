@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Packaging;
@@ -28,39 +29,45 @@ namespace PowerpointAccessories
             this.powerpoint = powerpoint;
         }
 
-        public void Scan() //TODO add file exception handling 
+        public void Close()
+        {
+
+        }
+
+
+        public void Scan() 
         {
             try
             {
-                using (PresentationDocument document = PresentationDocument.Open(this.powerpoint.FilePath, true))
+                using PresentationDocument document = PresentationDocument.Open(this.powerpoint.FilePath, true);
+                SlidePart slidePart;
+                var presentation = document.PresentationPart.Presentation;
+                //Console.WriteLine("Loaded");
+                foreach (SlideId slideId in presentation.SlideIdList)
                 {
-                    SlidePart slidePart;
-                    var presentation = document.PresentationPart.Presentation;
-                    Console.WriteLine("Loaded");
-                    foreach (SlideId slideId in presentation.SlideIdList)
+                    slidePart = document.PresentationPart.GetPartById(slideId.RelationshipId) as SlidePart;
+                    if (slidePart == null || slidePart.Slide == null)
                     {
-                        slidePart = document.PresentationPart.GetPartById(slideId.RelationshipId) as SlidePart;
-                        if (slidePart == null || slidePart.Slide == null)
-                        {
-                            continue;
-                        }
-                        string currentSlideRelID = slideId.RelationshipId.Value;
-                        SlideModel slidemodel = CreateNewSlide(currentSlideRelID);
-                        Slide slide = slidePart.Slide;
-                        checkIssues(slide, currentSlideRelID, slidePart, document);
+                        continue;
                     }
+                    string currentSlideRelID = slideId.RelationshipId.Value;
+                    SlideModel slidemodel = CreateNewSlide(currentSlideRelID);
+                    Slide slide = slidePart.Slide;
+                    CheckIssues(slide, currentSlideRelID, slidePart, document);
                 }
+                document.Close();
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
+                
                 Console.WriteLine("Opps, we could not find the presentation you were referencing. Try again....");
             }
         }
 
-        private void checkIssues(Slide slide, String currentSlideRelID, SlidePart slidePart, PresentationDocument document)
+        private void CheckIssues(Slide slide, String currentSlideRelID, SlidePart slidePart, PresentationDocument document)
         {
-            checkForVideo(slide, currentSlideRelID, slidePart, document);
-            checkTransitionIssues(slide, currentSlideRelID, document);
+            CheckForVideo(slide, currentSlideRelID, slidePart, document);
+            CheckTransitionIssues(slide, currentSlideRelID, document);
         }
 
         private SlideModel CreateNewSlide(string id)
@@ -70,7 +77,7 @@ namespace PowerpointAccessories
             return slide;
         }
 
-        private void checkForVideo(Slide slide, String currentSlideRelID, SlidePart slidePart, PresentationDocument document)
+        private void CheckForVideo(Slide slide, String currentSlideRelID, SlidePart slidePart, PresentationDocument document)
         {
             var videos = slide.Descendants<VideoFromFile>();
 
@@ -93,17 +100,18 @@ namespace PowerpointAccessories
 
         }
 
-        private void checkTransitionIssues(Slide slide, String currentSlideRelID, PresentationDocument document)
+
+        private void CheckTransitionIssues(Slide slide, String currentSlideRelID, PresentationDocument document)
         {
             var transitionElements = slide.Descendants<Transition>();
             foreach (var transitionElement in transitionElements)
             {
-                checkForAutoTransition(currentSlideRelID, transitionElement);
-                checkForNoMouseClickTransition(currentSlideRelID, transitionElement);
+                CheckForAutoTransition(currentSlideRelID, transitionElement);
+                CheckForNoMouseClickTransition(currentSlideRelID, transitionElement);
             }
         }
 
-        private void checkForNoMouseClickTransition(string currentSlideRelID, Transition transitionElement)
+        private void CheckForNoMouseClickTransition(string currentSlideRelID, Transition transitionElement)
         {
             if (!(transitionElement.Parent.GetType() == typeof(AlternateContentFallback)))
             {
@@ -116,19 +124,19 @@ namespace PowerpointAccessories
             }
         }
 
-        private void checkForAutoTransition(String currentSlideRelID, Transition transitionElement)
+        private void CheckForAutoTransition(String currentSlideRelID, Transition transitionElement)
         {
-            var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advTm").FirstOrDefault();
-            if (attribute.Value != null)
+            if (!(transitionElement.Parent.GetType() == typeof(AlternateContentFallback)))
             {
-                IIssue issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found auto transition on {SlideModel.rIdtoSlideIndex(currentSlideRelID)} duration: {attribute.Value} ", true);
-                powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                var attribute = transitionElement.GetAttributes().Where(x => x.LocalName == "advTm").FirstOrDefault();
+                if (attribute.Value != null)
+                {
+                    IIssue issue = new AutoTransitionIssue(Int32.Parse(attribute.Value), transitionElement, $"Found auto transition on {SlideModel.rIdtoSlideIndex(currentSlideRelID)} duration: {attribute.Value} ", true);
+                    powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                }
             }
-
 
         }
 
-         
-       
     }
 }
