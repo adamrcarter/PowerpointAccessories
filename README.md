@@ -7,9 +7,7 @@
 - [Installation](#installation)
 - [Features](#features)
 - [Contributing](#contributing)
-- [Team](#team)
 - [FAQ](#faq)
-- [Support](#support)
 - [License](#license)
 
 
@@ -52,8 +50,8 @@ $ dotnet build
 
 ## Features
 
--Scan pptx file for Auto Transistion, video and no click issues.
--CLI to use library stand alone when not incorporating into software
+- Scan pptx file for Auto Transistion, video and no click issues.
+- CLI to use library stand alone when not incorporating into software
 
 ---
 
