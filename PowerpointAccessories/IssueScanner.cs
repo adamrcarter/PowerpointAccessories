@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Packaging;
@@ -39,7 +34,11 @@ namespace PowerpointAccessories
         {
             try
             {
-                using PresentationDocument document = PresentationDocument.Open(this.powerpoint.FilePath, true);
+                if (this.powerpoint.Stream == null)
+                {
+                    this.powerpoint.Stream = File.Open(this.powerpoint.FilePath, FileMode.Open);
+                }
+                using PresentationDocument document = PresentationDocument.Open(this.powerpoint.Stream, true);
                 SlidePart slidePart;
                 var presentation = document.PresentationPart.Presentation;
                 //Console.WriteLine("Loaded");

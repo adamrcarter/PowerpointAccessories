@@ -1,6 +1,7 @@
 ﻿using PowerpointAccessories;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace PowerpointAccessories
@@ -8,6 +9,7 @@ namespace PowerpointAccessories
     public interface IPowerpoint
     {
         public string FilePath { get; }
+        public Stream Stream { get; set; }
 
         public IDictionary<string, SlideModel> slides { get; set; }
 
