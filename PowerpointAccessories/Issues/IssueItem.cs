@@ -11,11 +11,13 @@ namespace PowerpointAccessories.Issues
             this._description = Description;
             this._isFixable = IsFixable;
             this._isFixed = IsFixed;
+            Type = this.GetType().Name;
         }
 
         private string _description;
         private bool _isFixed;
         private bool _isFixable;
+        public string Type { get; }
 
         public string Description
         {

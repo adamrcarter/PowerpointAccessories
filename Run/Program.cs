@@ -48,7 +48,7 @@ namespace Run
                     {
                         if (slide.Value.Issues.Count != 0)
                         {
-                            slide.Value.Issues.ForEach(x => Console.WriteLine($"{x.GetType()} {x.Description}"));
+                            slide.Value.Issues.ForEach(x => Console.WriteLine($"{x.Type} {x.Description}"));
                         }
                         else
                         {

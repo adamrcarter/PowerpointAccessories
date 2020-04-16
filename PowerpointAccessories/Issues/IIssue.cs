@@ -7,5 +7,6 @@ namespace PowerpointAccessories.Issues
         string Description { get; set; }
         bool IsFixable { get; set; }
         bool IsFixed { get; set; }
+        string Type { get; }
     }
 }

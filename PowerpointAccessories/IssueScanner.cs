@@ -55,6 +55,7 @@ namespace PowerpointAccessories
                     CheckIssues(slide, currentSlideRelID, slidePart, document);
                 }
                 document.Close();
+                this.powerpoint.Stream.Close();
             }
             catch (FileNotFoundException)
             {
