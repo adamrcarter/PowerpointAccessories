@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DocumentFormat.OpenXml;
@@ -18,10 +20,12 @@ namespace PowerpointAccessories
     {
 
         public IPowerpoint powerpoint { get; }
+        private string[] Win10Fonts;
 
         public IssueScanner(IPowerpoint powerpoint)
         {
             this.powerpoint = powerpoint;
+            Win10Fonts = File.ReadAllLines("./Win10Fonts.txt");
         }
 
         public void Close()
@@ -41,6 +45,7 @@ namespace PowerpointAccessories
                 using PresentationDocument document = PresentationDocument.Open(this.powerpoint.Stream, true);
                 SlidePart slidePart;
                 var presentation = document.PresentationPart.Presentation;
+                List<EmbeddedFont> embeddedFonts = document.PresentationPart.Presentation.Descendants<EmbeddedFont>().ToList();
                 //Console.WriteLine("Loaded");
                 foreach (SlideId slideId in presentation.SlideIdList)
                 {
@@ -52,7 +57,7 @@ namespace PowerpointAccessories
                     string currentSlideRelID = slideId.RelationshipId.Value;
                     SlideModel slidemodel = CreateNewSlide(currentSlideRelID);
                     Slide slide = slidePart.Slide;
-                    CheckIssues(slide, currentSlideRelID, slidePart, document);
+                    CheckIssues(slide, currentSlideRelID, slidePart, document, embeddedFonts);
                 }
                 document.Close();
                 this.powerpoint.Stream.Close();
@@ -64,10 +69,11 @@ namespace PowerpointAccessories
             }
         }
 
-        private void CheckIssues(Slide slide, String currentSlideRelID, SlidePart slidePart, PresentationDocument document)
+        private void CheckIssues(Slide slide, String currentSlideRelID, SlidePart slidePart, PresentationDocument document, List<EmbeddedFont> embeddedFonts)
         {
             CheckForVideo(slide, currentSlideRelID, slidePart, document);
             CheckTransitionIssues(slide, currentSlideRelID, document);
+            CheckForNonStandardFonts(slide, currentSlideRelID, document, embeddedFonts);
         }
 
         private SlideModel CreateNewSlide(string id)
@@ -85,7 +91,7 @@ namespace PowerpointAccessories
             {
                 String path = slidePart.GetReferenceRelationship(video.Link).Uri.OriginalString;
                 String fileExtension = System.IO.Path.GetExtension(path);
-                String description = $"Found video on slide {SlideModel.rIdtoSlideIndex(currentSlideRelID)}, file extension is {fileExtension}";
+                String description = $"Found video issue on slide {SlideModel.rIdtoSlideIndex(currentSlideRelID)}, file extension is {fileExtension}";
                 Boolean fixable;
                 String filename = System.IO.Path.GetFileName(path);
                 if (fileExtension == ".mp4") { fixable = false; }
@@ -124,7 +130,7 @@ namespace PowerpointAccessories
             }
         }
 
-        private void CheckForAutoTransition(String currentSlideRelID, Transition transitionElement)
+        private void CheckForAutoTransition(string currentSlideRelID, Transition transitionElement)
         {
             if (!(transitionElement.Parent.GetType() == typeof(AlternateContentFallback)))
             {
@@ -135,6 +141,22 @@ namespace PowerpointAccessories
                     powerpoint.slides[currentSlideRelID].addToIssueList(issue);
                 }
             }
+
+        }
+
+        private void CheckForNonStandardFonts(Slide slide, string currentSlideRelID, PresentationDocument document, List<EmbeddedFont> embeddedFonts)
+        {
+            
+            foreach(LatinFont font in slide.Descendants<LatinFont>())
+            {
+                if (Win10Fonts.FirstOrDefault( x=> x == font.Typeface.Value.ToLower()) == null && embeddedFonts.FirstOrDefault(x=> x.Font.Typeface.Value.ToLower() == font.Typeface.Value.ToLower()) == null)
+                {
+                    string fontname = font.Typeface.Value;
+                    IIssue issue = new FontIssue(null, font.Typeface.Value, $"A non-standard powerpoint font - {font.Typeface.Value} was found and is not embedded", true, true);
+                    powerpoint.slides[currentSlideRelID].addToIssueList(issue);
+                }
+            }
+            
 
         }
 

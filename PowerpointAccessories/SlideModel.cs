@@ -10,6 +10,8 @@ namespace PowerpointAccessories
         public int slideId { get; set; }
         public List<IIssue> Issues { get; } 
 
+        public List<string> Fonts { get; set; }
+
         public SlideModel(int slideId)
         {
             this.slideId = slideId;

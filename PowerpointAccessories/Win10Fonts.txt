@@ -1,0 +1,176 @@
+﻿arial
+arial italic
+arial bold
+arial bold italic
+arial black
+calibri light
+calibri light italic
+calibri
+calibri
+calibri italic
+calibri bold
+calibri bold italic
+cambria
+cambria italic
+cambria bold
+cambria bold italic
+cambria math
+candara light
+candara light italic
+candara
+candara italic
+candara bold
+candara bold italic
+comic sans ms
+comic sans ms italic
+comic sans ms bold italic
+consolas
+consolas italic
+consolas bold
+consolas bold italic
+constantia
+constantia italic
+constantia bold
+constantia bold italic
+corbel light
+corbel light italic
+corbel
+corbel italic
+corbel bold
+corbel bold italic
+courier new
+courier new italic
+courier new bold
+courier new bold italic
+ebrima
+ebrima bold
+franklin gothic medium
+franklin gothic medium italic
+gabriola
+gadugi
+gadugi bold
+georgia
+georgia bold
+georgia italic
+georgia bold italic
+hololens mdl2 assets
+impact
+ink free
+javanese text
+leelawadee ui
+leelawadee ui semilight
+leelawadee ui bold
+lucida console
+lucida sans unicode
+malgun gothic
+malgun gothic bold
+malgun gothic semilight
+marlett
+microsoft himalaya
+microsoft jhengHei light
+microsoft jhengHei
+microsoft jhengHei bold
+microsoft jhengHei ui light
+microsoft jhengHei ui
+microsoft jhengHei ui bold
+microsoft new tai lue
+microsoft new tai lue bold
+microsoft phagsPa
+microsoft phagsPa bold
+microsoft sans serif
+microsoft tai le
+microsoft tai le bold
+microsoft yahei light
+microsoft yahei
+microsoft yahei bold
+microsoft yahei ui light
+microsoft yahei ui
+microsoft yahei ui bold
+microsoft yi baiti
+mingliu-extb
+pmingliu-extb
+mongolian baiti
+ms gothic
+ms pgothic
+ms ui gothic
+mv boli
+myanmar text
+myanmar text bold
+nirmala ui semilight
+nirmala ui
+nirmala ui bold
+palatino linotype
+palatino linotype italic
+palatino linotype bold
+palatino linotype bold italic
+segoe mdl2 assets
+segoe print
+segoe print bold
+segoe script
+segoe script bold
+segoe ui light
+segoe ui light italic
+segoe ui semilight
+segoe ui semilight italic
+segoe ui
+segoe ui italic
+segoe ui semibold
+segoe ui semibold italic
+segoe ui bold
+segoe ui bold italic
+segoe ui black
+segoe ui black italic
+segoe ui historic
+segoe ui emoji
+segoe ui symbol
+simsun
+nsimsun
+simsun-extb
+sikta small
+sikta small
+sikta small italic
+sikta small bold
+sikta small bold italic
+sikta text
+sikta text italic
+sikta text bold
+sikta text bold italic
+sikta subheading
+sikta subheading italic
+sikta subheading bold
+sikta subheading bold italic
+sikta display
+sikta display italic
+sikta display bold
+sikta display bold italic
+sikta banner
+sikta banner italic
+sikta banner bold
+sikta banner bold italic
+sylfaen
+symbol
+tahoma
+tahoma bold
+times new roman
+times new roman italic
+times new roman bold
+times new roman bold italic
+trebuchet ms
+trebuchet ms italic
+trebuchet ms bold
+trebuchet ms bold italic
+verdana 
+verdana italic
+verdana bold
+verdana bold italic
+webdings
+wingdings
+yu gothic light
+yu gothic regular
+yu gothic medium
+yu gothic bold
+yu gothic ui light
+yu gothic ui semilight
+yu gothic ui regular
+yu gothic ui semibold
+yu gothic ui bold
