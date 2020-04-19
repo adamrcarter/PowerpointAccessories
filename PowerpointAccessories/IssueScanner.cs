@@ -149,7 +149,8 @@ namespace PowerpointAccessories
             
             foreach(LatinFont font in slide.Descendants<LatinFont>())
             {
-                if (Win10Fonts.FirstOrDefault( x=> x == font.Typeface.Value.ToLower()) == null && embeddedFonts.FirstOrDefault(x=> x.Font.Typeface.Value.ToLower() == font.Typeface.Value.ToLower()) == null)
+                if (Win10Fonts.FirstOrDefault( x=> x == font.Typeface.Value.ToLower()) == null 
+                    && embeddedFonts.FirstOrDefault(x=> x.Font.Typeface.Value.ToLower() == font.Typeface.Value.ToLower()) == null)
                 {
                     string fontname = font.Typeface.Value;
                     IIssue issue = new FontIssue(null, font.Typeface.Value, $"A non-standard powerpoint font - {font.Typeface.Value} was found and is not embedded", true, true);
