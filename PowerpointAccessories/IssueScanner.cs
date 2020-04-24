@@ -25,7 +25,7 @@ namespace PowerpointAccessories
         public IssueScanner(IPowerpoint powerpoint)
         {
             this.powerpoint = powerpoint;
-            Win10Fonts = File.ReadAllLines("./Win10Fonts.txt");
+            Win10Fonts = PowerpointAccessories.Properties.Resources.Win10Fonts.Split(Environment.NewLine.ToCharArray());
         }
 
         public void Close()
@@ -159,6 +159,23 @@ namespace PowerpointAccessories
             }
             
 
+        }
+        private static string GetResource()
+        {
+            var assembly = typeof(PowerpointAccessories.IssueScanner).GetType().Assembly;
+            var resourceName = assembly.GetManifestResourceNames();
+
+            using (var stream = assembly.GetManifestResourceStream("PowerpointAccessories.Win10Fonts.txt"))
+            {
+                if (stream == null)
+                {
+                    throw new InvalidOperationException("Could not load manifest resource stream.");
+                }
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
         }
 
     }
